@@ -55,45 +55,50 @@ function install_fdb_lib {
     popd
 }
 
-if [ -n "$2" ]; then
-    echo "Setting Baseline revision: ".$2
-    install_fdb_lib $2
-else
-    echo "Using preinstalled fdb lib"
-fi
-sleep 1
+# CHECK if Using stale data
+if [ "$2" != '.' ]; then
+    if [ -n "$2" ]; then
+        echo "Setting Baseline revision: ".$2
+        install_fdb_lib $2
+    else
+        echo "Using preinstalled fdb lib"
+    fi
+    sleep 1
 
-# run bench 5 times at current repo
-for i in $(seq 1 $PHASE_COUNT); do
+    # run bench 5 times at current repo
+    for i in $(seq 1 $PHASE_COUNT); do
 
-  PHASEDIR=phase.$i
-  mkdir -p $PHASEDIR
-  echo $PHASEDIR/$NEW_BENCH_STATS
-  run_bench $PHASEDIR/$NEW_BENCH_STATS
-done
-
-
-
-# CHECK IF DOING BUILD-2-BUILD comparision
-if [ -n "$1" ]; then
-  OLD_REV=$1
-  echo "Comparing to Revision: ".$OLD_REV
-else
-  NEW_REV="--"
-  echo "Comparing to Master/Head"
+      PHASEDIR=phase.$i
+      mkdir -p $PHASEDIR
+      echo $PHASEDIR/$NEW_BENCH_STATS
+      run_bench $PHASEDIR/$NEW_BENCH_STATS
+    done
 fi
 
-sleep 1
+# CHECK if using stale data
+if [ "$1" != '.' ]; then
 
-# install baseline revision
-install_fdb_lib $OLD_REV
-# run bench 5 times at old repo
-for i in $(seq 1 $PHASE_COUNT); do
+    # CHECK IF DOING BUILD-2-BUILD comparision
+    if [ -n "$1" ]; then
+      OLD_REV=$1
+      echo "Comparing to Revision: ".$OLD_REV
+    else
+      NEW_REV="--"
+      echo "Comparing to Master/Head"
+    fi
 
-  PHASEDIR=phase.$i
-  mkdir -p $PHASEDIR
-  run_bench $PHASEDIR/$OLD_BENCH_STATS
-done
+    sleep 1
+
+    # install baseline revision
+    install_fdb_lib $OLD_REV
+    # run bench 5 times at old repo
+    for i in $(seq 1 $PHASE_COUNT); do
+
+      PHASEDIR=phase.$i
+      mkdir -p $PHASEDIR
+      run_bench $PHASEDIR/$OLD_BENCH_STATS
+    done
+fi
 
 # generate bench report for each phase
 for i in $(seq 1 $PHASE_COUNT); do
