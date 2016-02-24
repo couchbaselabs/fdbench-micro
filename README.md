@@ -1,6 +1,11 @@
 # fdbench-micro
 forestdb micro benchmark testing
 
+**dependencies**
+See: https://github.com/couchbase/forestdb/blob/master/INSTALL.md#dependencies
+
+ *NOTE: make install* of forestdb libraries is required prior to run
+ 
 **Standalone**
 ```bash
 mkdir build && cd build 
@@ -33,5 +38,4 @@ sudo ./compare_bench_report.sh 22106
 
 
 ```
-**dependencies**
-See: https://github.com/couchbase/forestdb/blob/master/INSTALL.md#dependencies
+
