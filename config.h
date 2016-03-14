@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; c-basic-offset: 4; indent-tabs-mode: nil -*- */
 /*
- *     Copyright 2010 Couchbase, Inc
+ *     Copyright 2016 Couchbase, Inc
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@
 #include <sys/time.h>
 #endif
 
+#include <string>
+#include <vector>
 
 //#define __DEBUG_E2E
 
@@ -42,9 +44,8 @@ static const char ST_ITR_NEXT[] = "iterator_next";
 static const char ST_ITR_CLOSE[] = "iterator_close";
 
 typedef struct {
-    char name[64];
-    uint64_t latency;
-    uint16_t n;
+    std::string name;
+    std::vector<uint64_t> latencies;
 } stat_history_t;
 
 struct reader_context {
