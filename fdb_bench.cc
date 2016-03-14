@@ -46,6 +46,7 @@ struct Stats {
 class StatCollector {
 public:
     StatCollector(int _num_stats, int _num_samples) {
+
         num_stats = _num_stats;
         num_samples = _num_samples;
         t_stats = new stat_history_t*[num_stats];
@@ -55,6 +56,7 @@ public:
     }
 
     ~StatCollector() {
+
         for (int i = 0; i < num_stats; ++i) {
             delete[] t_stats[i];
         }
@@ -62,6 +64,7 @@ public:
     }
 
     void aggregateAndPrintAll(const char* title, int count, const char* unit) {
+
         std::vector<std::pair<std::string, std::vector<uint64_t>*> > all_timings;
         for (int i = 0; i < num_stats; ++i) {
             for (int j = 1; j < num_samples; ++j) {
@@ -95,6 +98,7 @@ private:
     void print_values(
                 std::vector<std::pair<std::string, std::vector<T>*> > values,
                 std::string unit) {
+
         // First, calculate mean, median, standard deviation and percentiles
         // of each set of values, both for printing and to derive what the
         // range of the graphs should be.
@@ -194,6 +198,7 @@ private:
     }
 
     void fillLineWith(const char c, int spaces) {
+
         for (int i = 0; i < spaces; ++i) {
             putchar(c);
         }
@@ -205,6 +210,7 @@ private:
 };
 
 bool track_stat(stat_history_t *stat, uint64_t lat) {
+
     if (lat == ERR_NS) {
       return false;
     }
@@ -218,6 +224,7 @@ bool track_stat(stat_history_t *stat, uint64_t lat) {
 }
 
 void print_db_stats(fdb_file_handle **dbfiles, int nfiles) {
+
     int i, j;
     fdb_status status;
     fdb_latency_stat stat;
@@ -245,6 +252,7 @@ void print_db_stats(fdb_file_handle **dbfiles, int nfiles) {
 }
 
 void str_gen(char *s, const int len) {
+
     int i = 0;
     static const char alphanum[] =
         "0123456789"
@@ -265,6 +273,7 @@ void str_gen(char *s, const int len) {
 }
 
 void swap(char *x, char *y) {
+
     char temp;
     temp = *x;
     *x = *y;
@@ -272,6 +281,7 @@ void swap(char *x, char *y) {
 }
 
 void permute(fdb_kvs_handle *kv, char *a, int l, int r) {
+
     int i;
     char keybuf[256], metabuf[256], bodybuf[1024];
     fdb_doc *doc = NULL;
@@ -295,6 +305,7 @@ void permute(fdb_kvs_handle *kv, char *a, int l, int r) {
 }
 
 void sequential(fdb_kvs_handle *kv, int pos) {
+
     int i;
     char keybuf[256], metabuf[256], bodybuf[512];
     fdb_doc *doc = NULL;
@@ -311,32 +322,6 @@ void sequential(fdb_kvs_handle *kv, int pos) {
         fdb_doc_free(doc);
     }
 }
-
-void setup_db(fdb_file_handle **fhandle, fdb_kvs_handle **kv) {
-
-    int r;
-    char cmd[64];
-
-    fdb_status status;
-    fdb_config config;
-    fdb_kvs_config kvs_config;
-    kvs_config = fdb_get_default_kvs_config();
-    config = fdb_get_default_config();
-    config.durability_opt = FDB_DRB_ASYNC;
-    config.compaction_mode = FDB_COMPACTION_MANUAL;
-
-    // cleanup first
-    sprintf(cmd, "rm %s*>errorlog.txt", BENCHDB_NAME);
-    r = system(cmd);
-    (void)r;
-
-    status = fdb_open(fhandle, BENCHDB_NAME, &config);
-    assert(status == FDB_RESULT_SUCCESS);
-
-    status = fdb_kvs_open(*fhandle, kv, BENCHKV_NAME , &kvs_config);
-    assert(status == FDB_RESULT_SUCCESS);
-}
-
 
 void writer(fdb_kvs_handle *db, int pos) {
 
@@ -397,7 +382,7 @@ void deletes(fdb_kvs_handle *db, int pos) {
     }
 }
 
-void do_bench(){
+void do_bench() {
 
     int i, j, r;
     int n_loops = 5;
@@ -583,5 +568,6 @@ void do_bench(){
  *  Performs unit benchmarking with 16 dbfiles each with max 16 kvs
  */
 int main(int argc, char* args[]) {
+
     do_bench();
 }
