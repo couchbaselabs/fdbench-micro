@@ -17,5 +17,5 @@ endif ((NOT WIN32) AND (NOT APPLE))
 # add test target
 add_test(fdb_bench fdb_bench)
 ADD_CUSTOM_TARGET(benchmark
-    COMMAND ctest
+    COMMAND ./fdb_bench
 )
