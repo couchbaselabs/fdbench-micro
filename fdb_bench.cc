@@ -140,7 +140,7 @@ private:
             spark_end = (stats.pct95 > spark_end) ? stats.pct95 : spark_end;
         }
 
-        printf("\n                                Percentile           \n");
+        printf("\n                                Percentile\n");
         printf("  %-16s Median     95th     99th  Std Dev  "
                "Histogram of samples\n\n", "");
         // Finally, print out each set.
@@ -246,6 +246,7 @@ void print_db_stats(fdb_file_handle **dbfiles, int nfiles) {
             }
         }
     }
+    (void)status;
 
     sa->aggregateAndPrintAll("FDB_STATS", nfiles, "ms");
     delete sa;
@@ -364,7 +365,7 @@ void reader(reader_context *ctx) {
                             timed_fdb_iterator_next(iterator));
     } while (!is_err);
     track_stat(ctx->stat_itr_close, timed_fdb_iterator_close(iterator));
-
+    (void)status;
 }
 
 void deletes(fdb_kvs_handle *db, int pos) {
@@ -556,6 +557,7 @@ void do_bench() {
 
     fdb_shutdown();
 
+    (void)status;
     sprintf(cmd, "rm bench* > errorlog.txt");
     r = system(cmd);
     (void)r;
